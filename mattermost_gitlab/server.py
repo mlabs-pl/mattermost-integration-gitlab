@@ -105,7 +105,7 @@ def post_text(text, mattermost_webhook_url, channel):
     resp = requests.post(mattermost_webhook_url, headers=headers, data=json.dumps(data))
 
     if resp.status_code is not requests.codes.ok:
-        print('Encountered error posting to Mattermost URL %s, status=%d, response_body=%s' % (app.config['MATTERMOST_WEBHOOK_URL'], resp.status_code, resp.json()))
+        print('Encountered error posting to Mattermost URL %s, status=%d, response_body=%s' % (mattermost_webhook_url, resp.status_code, resp.json()))
 
 
 def parse_args(args=None):
