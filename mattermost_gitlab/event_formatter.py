@@ -7,7 +7,7 @@ from __future__ import unicode_literals, absolute_import, print_function
 # Python System imports
 import re
 
-from . import constants
+from mattermost_gitlab import constants
 
 
 def fix_gitlab_links(base_url, text):

@@ -13,7 +13,7 @@ import argparse
 # Third-party imports
 from flask import Flask, request
 
-from . import event_formatter, constants
+from mattermost_gitlab import event_formatter, constants
 
 
 app = Flask(__name__)
