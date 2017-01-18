@@ -19,6 +19,9 @@ from . import event_formatter, constants
 app = Flask(__name__)
 
 
+def get_channel_from_request(request):
+    return request.args.get('channel')
+
 @app.route('/')
 def root():
     """
@@ -47,7 +50,7 @@ def new_event():
 
         if event.should_report_event(app.config['REPORT_EVENTS']):
             text = event.format()
-            post_text(text, mattermost_webhook_url)
+            post_text(text, mattermost_webhook_url, get_channel_from_request(request))
     except Exception:
         import traceback
         traceback.print_exc()
@@ -74,7 +77,7 @@ def new_ci_event():
 
         if event.should_report_event(app.config['REPORT_EVENTS']):
             text = event.format()
-            post_text(text, mattermost_webhook_url)
+            post_text(text, mattermost_webhook_url, get_channel_from_request(request))
     except Exception:
         import traceback
         traceback.print_exc()
@@ -82,7 +85,7 @@ def new_ci_event():
     return 'OK'
 
 
-def post_text(text, mattermost_webhook_url):
+def post_text(text, mattermost_webhook_url, channel):
     """
     Mattermost POST method, posts text to the Mattermost incoming webhook URL
     """
@@ -93,7 +96,9 @@ def post_text(text, mattermost_webhook_url):
         data['username'] = app.config['USERNAME']
     if app.config['ICON_URL']:
         data['icon_url'] = app.config['ICON_URL']
-    if app.config['CHANNEL']:
+    if channel:
+        data['channel'] = channel
+    elif app.config['CHANNEL']:
         data['channel'] = app.config['CHANNEL']
 
     headers = {'Content-Type': 'application/json'}
