@@ -42,7 +42,7 @@ def new_event():
         return 'Content-Type must be application/json and the request body must contain valid JSON', 400
     elif 'mattermost_webhook_url' not in request.args:
         print('Mattermost Webhook URL not set')
-        return 'Mattermost Webhook URL must be set'
+        return 'Mattermost Webhook URL must be set', 500
 
     try:
         event = event_formatter.as_event(request.json)
@@ -69,7 +69,7 @@ def new_ci_event():
         return 'Content-Type must be application/json and the request body must contain valid JSON', 400
     elif 'mattermost_webhook_url' not in request.args:
         print('Mattermost Webhook URL not set')
-        return 'Mattermost Webhook URL must be set'
+        return 'Mattermost Webhook URL must be set', 500
 
     try:
         event = event_formatter.CIEvent(request.json)
