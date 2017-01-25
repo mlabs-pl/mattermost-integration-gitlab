@@ -40,6 +40,10 @@ def add_markdown_quotes(text):
     return '\n'.join(split_desc)
 
 
+def clean_ref_name(ref):
+    return ref.lstrip("refs/heads/")
+
+
 class BaseEvent(object):
 
     def __init__(self, data):
@@ -82,7 +86,7 @@ class PushEvent(BaseEvent):
         text = '%s %s the `%s` branch for project [%s](%s)%s' % (
             self.data['user_name'],
             action,
-            self.data['ref'],
+            clean_ref_name(self.data['ref']),
             self.data['repository']['name'],
             self.data['repository']['homepage'],
             suffix
@@ -140,7 +144,7 @@ class TagEvent(BaseEvent):
     def format(self):
         return '%s pushed tag `%s` to the project [%s](%s).' % (
             self.data['user_name'],
-            self.data['ref'],
+            clean_ref_name(self.data['ref']),
             self.data['repository']['name'],
             self.data['repository']['homepage']
         )
