@@ -142,8 +142,12 @@ class IssueEvent(BaseEvent):
 
 class TagEvent(BaseEvent):
     def format(self):
-        return '%s pushed tag `%s` to the project [%s](%s).' % (
+        action = 'created'
+        if self.data['after'] == '0' * 40:
+            action = 'deleted'
+        return '%s %s tag `%s` in the project [%s](%s).' % (
             self.data['user_name'],
+            action,
             clean_ref_name(self.data['ref']),
             self.data['repository']['name'],
             self.data['repository']['homepage']
