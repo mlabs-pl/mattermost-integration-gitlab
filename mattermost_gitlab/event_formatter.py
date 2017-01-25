@@ -64,21 +64,24 @@ class BaseEvent(object):
 class PushEvent(BaseEvent):
 
     def format(self):
-
         if self.data['before'] == '0' * 40:
             description = 'the first commit'
         else:
             description = '{} commit'.format(self.data['total_commits_count'])
         if self.data['total_commits_count'] > 1:
             description += "s"
+        action = 'pushed %s into' % description
 
         suffix = '.'
         if len(self.data['commits']) > 0:
             suffix = ':\n'
 
-        text = '%s pushed %s into the `%s` branch for project [%s](%s)%s' % (
+        if self.data['after'] == '0' * 40:
+            action = 'deleted'
+
+        text = '%s %s the `%s` branch for project [%s](%s)%s' % (
             self.data['user_name'],
-            description,
+            action,
             self.data['ref'],
             self.data['repository']['name'],
             self.data['repository']['homepage'],
