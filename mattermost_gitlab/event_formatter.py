@@ -41,7 +41,12 @@ def add_markdown_quotes(text):
 
 
 def clean_ref_name(ref):
-    return ref.lstrip("refs/heads/")
+    def strip_prefix(text, prefix):
+	if text.startswith(prefix):
+	    return text[len(prefix):]
+	return text
+
+    return strip_prefix(ref, "refs/heads/")
 
 
 class BaseEvent(object):
